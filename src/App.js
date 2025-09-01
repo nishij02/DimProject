@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Target,
   Trophy,
@@ -150,6 +150,43 @@ const LearningDashboard = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState("");
   const [editingItem, setEditingItem] = useState(null);
+
+  // Set page title and meta description based on current page
+  useEffect(() => {
+    let title = "Learning Goal Tracker - Track Your Progress";
+    let description = "A comprehensive learning dashboard to track your goals, tasks, and progress in one place.";
+    
+    if (currentPage === "goals") {
+      title = "My Learning Goals - Learning Goal Tracker";
+      description = "Manage and track your learning goals with progress indicators and due dates.";
+    } else if (currentPage === "tasks") {
+      title = "My Tasks - Learning Goal Tracker";
+      description = "Organize and complete tasks related to your learning goals with priority levels.";
+    } else if (currentPage === "profile") {
+      title = "Profile & Statistics - Learning Goal Tracker";
+      description = "View your learning statistics, achievements, and personal information.";
+    }
+    
+    document.title = title;
+    
+    // Update meta description
+    let metaDescription = document.querySelector('meta[name="description"]');
+    if (!metaDescription) {
+      metaDescription = document.createElement('meta');
+      metaDescription.name = "description";
+      document.head.appendChild(metaDescription);
+    }
+    metaDescription.content = description;
+    
+    // Update canonical URL (if needed in a real app)
+    // let canonicalLink = document.querySelector('link[rel="canonical"]');
+    // if (!canonicalLink) {
+    //   canonicalLink = document.createElement('link');
+    //   canonicalLink.rel = "canonical";
+    //   document.head.appendChild(canonicalLink);
+    // }
+    // canonicalLink.href = window.location.href;
+  }, [currentPage]);
 
   const [goals, setGoals] = useState([
     {
@@ -353,7 +390,7 @@ const LearningDashboard = () => {
           <article style={{ ...styles.card, borderLeft: "4px solid #3b82f6" }}>
             <header style={{ display: "flex", justifyContent: "space-between", marginBottom: "1rem" }}>
               <h2 style={{ fontWeight: "600", color: "#374151", margin: 0, fontSize: "1rem" }}>Overall Progress</h2>
-              <TrendingUp color="#3b82f6" size={24} />
+              <TrendingUp color="#3b82f6" size={24} aria-hidden="true" />
             </header>
             <p style={{ fontSize: "2rem", fontWeight: "bold", color: "#2563eb", margin: "0 0 0.5rem 0" }}>
               {avgProgress.toFixed(0)}%
@@ -364,7 +401,7 @@ const LearningDashboard = () => {
           <article style={{ ...styles.card, borderLeft: "4px solid #eab308" }}>
             <header style={{ display: "flex", justifyContent: "space-between", marginBottom: "1rem" }}>
               <h2 style={{ fontWeight: "600", color: "#374151", margin: 0, fontSize: "1rem" }}>Achievements</h2>
-              <Trophy color="#eab308" size={24} />
+              <Trophy color="#eab308" size={24} aria-hidden="true" />
             </header>
             <p style={{ fontSize: "2rem", fontWeight: "bold", color: "#eab308", margin: "0 0 0.5rem 0" }}>
               {completedGoals}
@@ -375,7 +412,7 @@ const LearningDashboard = () => {
           <article style={{ ...styles.card, borderLeft: "4px solid #16a34a" }}>
             <header style={{ display: "flex", justifyContent: "space-between", marginBottom: "1rem" }}>
               <h2 style={{ fontWeight: "600", color: "#374151", margin: 0, fontSize: "1rem" }}>Tasks Complete</h2>
-              <CheckCircle color="#16a34a" size={24} />
+              <CheckCircle color="#16a34a" size={24} aria-hidden="true" />
             </header>
             <p style={{ fontSize: "2rem", fontWeight: "bold", color: "#16a34a", margin: "0 0 0.5rem 0" }}>
               {completedTasks}
@@ -386,7 +423,7 @@ const LearningDashboard = () => {
           <article style={{ ...styles.card, borderLeft: "4px solid #ef4444" }}>
             <header style={{ display: "flex", justifyContent: "space-between", marginBottom: "1rem" }}>
               <h2 style={{ fontWeight: "600", color: "#374151", margin: 0, fontSize: "1rem" }}>High Priority</h2>
-              <Star color="#ef4444" size={24} />
+              <Star color="#ef4444" size={24} aria-hidden="true" />
             </header>
             <p style={{ fontSize: "2rem", fontWeight: "bold", color: "#ef4444", margin: "0 0 0.5rem 0" }}>
               {highPriorityTasks}
@@ -398,7 +435,7 @@ const LearningDashboard = () => {
         {/* Recent Activity */}
         <div style={styles.card}>
           <h2 style={{ fontSize: "1.25rem", fontWeight: "600", marginBottom: "1rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <Brain color="#8b5cf6" /> Quick Insights
+            <Brain color="#8b5cf6" aria-hidden="true" /> Quick Insights
           </h2>
           <div style={{ display: "grid", gap: "1rem" }}>
             <div style={{ padding: "1rem", backgroundColor: "#f0f9ff", borderRadius: "0.375rem", borderLeft: "3px solid #3b82f6" }}>
@@ -418,20 +455,21 @@ const LearningDashboard = () => {
   };
 
   const Goals = () => (
-    <section>
+    <section aria-labelledby="goals-title">
       <div style={styles.card}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem" }}>
-          <h2 style={{ fontSize: "1.5rem", fontWeight: "600", margin: 0 }}>My Goals</h2>
+          <h2 id="goals-title" style={{ fontSize: "1.5rem", fontWeight: "600", margin: 0 }}>My Goals</h2>
           <button
             onClick={() => openModal("goal")}
             style={{ ...styles.button, ...styles.primaryButton, display: "flex", alignItems: "center", gap: "0.5rem" }}
+            aria-label="Add new goal"
           >
-            <Plus size={16} /> Add Goal
+            <Plus size={16} aria-hidden="true" /> Add Goal
           </button>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-          {goals.map((goal) => (
-            <div
+          {goals.length > 0 ? goals.map((goal) => (
+            <article
               key={goal.id}
               style={{
                 border: "1px solid #e5e7eb",
@@ -450,23 +488,25 @@ const LearningDashboard = () => {
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.5rem" }}>
                 <h3 style={{ margin: 0, fontSize: "1.25rem", fontWeight: "600", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                  {goal.category === "Programming" && <Code size={20} color="#3b82f6" />}
-                  {goal.category === "Books" && <BookOpen size={20} color="#16a34a" />}
-                  {goal.category === "Design" && <Target size={20} color="#8b5cf6" />}
+                  {goal.category === "Programming" && <Code size={20} color="#3b82f6" aria-hidden="true" />}
+                  {goal.category === "Books" && <BookOpen size={20} color="#16a34a" aria-hidden="true" />}
+                  {goal.category === "Design" && <Target size={20} color="#8b5cf6" aria-hidden="true" />}
                   {goal.title}
                 </h3>
                 <div style={{ display: "flex", gap: "0.5rem" }}>
                   <button
                     onClick={() => openModal("goal", goal)}
                     style={{ ...styles.button, ...styles.secondaryButton, padding: "0.25rem" }}
+                    aria-label={`Edit goal: ${goal.title}`}
                   >
-                    <Edit3 size={16} />
+                    <Edit3 size={16} aria-hidden="true" />
                   </button>
                   <button
                     onClick={() => deleteGoal(goal.id)}
                     style={{ ...styles.button, ...styles.dangerButton, padding: "0.25rem" }}
+                    aria-label={`Delete goal: ${goal.title}`}
                   >
-                    <Trash2 size={16} />
+                    <Trash2 size={16} aria-hidden="true" />
                   </button>
                 </div>
               </div>
@@ -487,7 +527,7 @@ const LearningDashboard = () => {
                   {goal.category}
                 </span>
                 <span style={{ display: "flex", alignItems: "center", gap: "0.25rem", color: "#6b7280", fontSize: "0.875rem" }}>
-                  <Calendar size={14} /> Due: {goal.dueDate}
+                  <Calendar size={14} aria-hidden="true" /> Due: {goal.dueDate}
                 </span>
               </div>
               
@@ -515,30 +555,36 @@ const LearningDashboard = () => {
                   }} />
                 </div>
               </div>
+            </article>
+          )) : (
+            <div style={{ textAlign: "center", padding: "2rem", color: "#6b7280" }}>
+              <Target size={48} color="#d1d5db" aria-hidden="true" style={{ marginBottom: "1rem" }} />
+              <p>No goals yet. Add your first goal to get started!</p>
             </div>
-          ))}
+          )}
         </div>
       </div>
     </section>
   );
 
   const Tasks = () => (
-    <section>
+    <section aria-labelledby="tasks-title">
       <div style={styles.card}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem" }}>
-          <h2 style={{ fontSize: "1.5rem", fontWeight: "600", margin: 0 }}>My Tasks</h2>
+          <h2 id="tasks-title" style={{ fontSize: "1.5rem", fontWeight: "600", margin: 0 }}>My Tasks</h2>
           <button
             onClick={() => openModal("task")}
             style={{ ...styles.button, ...styles.primaryButton, display: "flex", alignItems: "center", gap: "0.5rem" }}
+            aria-label="Add new task"
           >
-            <Plus size={16} /> Add Task
+            <Plus size={16} aria-hidden="true" /> Add Task
           </button>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-          {tasks.map((task) => {
+          {tasks.length > 0 ? tasks.map((task) => {
             const relatedGoal = goals.find(goal => goal.id === task.goalId);
             return (
-              <div
+              <article
                 key={task.id}
                 style={{
                   display: "flex",
@@ -561,11 +607,12 @@ const LearningDashboard = () => {
                 <button
                   onClick={() => toggleTask(task.id)}
                   style={{ backgroundColor: "transparent", border: "none", cursor: "pointer", padding: 0 }}
+                  aria-label={task.completed ? `Mark task "${task.text}" as incomplete` : `Mark task "${task.text}" as complete`}
                 >
                   {task.completed ? (
-                    <CheckCircle color="#16a34a" size={24} />
+                    <CheckCircle color="#16a34a" size={24} aria-hidden="true" />
                   ) : (
-                    <Circle color="#6b7280" size={24} />
+                    <Circle color="#6b7280" size={24} aria-hidden="true" />
                   )}
                 </button>
                 
@@ -603,13 +650,19 @@ const LearningDashboard = () => {
                       padding: "0.25rem",
                       fontSize: "0.75rem"
                     }}
+                    aria-label={`Delete task: ${task.text}`}
                   >
-                    <Trash2 size={14} />
+                    <Trash2 size={14} aria-hidden="true" />
                   </button>
                 </div>
-              </div>
+              </article>
             );
-          })}
+          }) : (
+            <div style={{ textAlign: "center", padding: "2rem", color: "#6b7280" }}>
+              <CheckCircle size={48} color="#d1d5db" aria-hidden="true" style={{ marginBottom: "1rem" }} />
+              <p>No tasks yet. Add your first task to get started!</p>
+            </div>
+          )}
         </div>
       </div>
     </section>
@@ -634,7 +687,7 @@ const LearningDashboard = () => {
           <header style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "2rem" }}>
             <div>
               <h2 id="profile-title" style={{ fontSize: "1.5rem", fontWeight: "600", marginBottom: "0.5rem", margin: "0 0 0.5rem 0", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                <User color="#3b82f6" /> Profile & Statistics
+                <User color="#3b82f6" aria-hidden="true" /> Profile & Statistics
               </h2>
             </div>
             <img
@@ -693,17 +746,17 @@ const LearningDashboard = () => {
             <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
               {profile.learningStreak >= 7 && (
                 <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.5rem 1rem", backgroundColor: "#fef3c7", borderRadius: "2rem", border: "1px solid #f59e0b" }}>
-                  <span>🔥</span> <span style={{ fontSize: "0.875rem", fontWeight: "500" }}>Week Warrior</span>
+                  <span aria-hidden="true">🔥</span> <span style={{ fontSize: "0.875rem", fontWeight: "500" }}>Week Warrior</span>
                 </div>
               )}
               {goals.filter(g => g.progress === 100).length > 0 && (
                 <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.5rem 1rem", backgroundColor: "#dcfce7", borderRadius: "2rem", border: "1px solid #16a34a" }}>
-                  <span>🏆</span> <span style={{ fontSize: "0.875rem", fontWeight: "500" }}>Goal Achiever</span>
+                  <span aria-hidden="true">🏆</span> <span style={{ fontSize: "0.875rem", fontWeight: "500" }}>Goal Achiever</span>
                 </div>
               )}
               {profile.completionRate >= 70 && (
                 <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.5rem 1rem", backgroundColor: "#dbeafe", borderRadius: "2rem", border: "1px solid #3b82f6" }}>
-                  <span>⭐</span> <span style={{ fontSize: "0.875rem", fontWeight: "500" }}>Consistent Learner</span>
+                  <span aria-hidden="true">⭐</span> <span style={{ fontSize: "0.875rem", fontWeight: "500" }}>Consistent Learner</span>
                 </div>
               )}
             </div>
@@ -736,9 +789,9 @@ const LearningDashboard = () => {
     };
 
     return (
-      <div style={styles.modal} onClick={closeModal}>
+      <div style={styles.modal} onClick={closeModal} role="dialog" aria-modal="true" aria-labelledby="modal-title">
         <div style={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-          <h3 style={{ fontSize: "1.25rem", fontWeight: "600", marginBottom: "1.5rem", margin: "0 0 1.5rem 0" }}>
+          <h3 id="modal-title" style={{ fontSize: "1.25rem", fontWeight: "600", marginBottom: "1.5rem", margin: "0 0 1.5rem 0" }}>
             {editingItem ? `Edit ${modalType}` : `Add New ${modalType}`}
           </h3>
           
@@ -746,10 +799,11 @@ const LearningDashboard = () => {
             {modalType === "goal" ? (
               <>
                 <div>
-                  <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "500", color: "#374151" }}>
+                  <label htmlFor="goal-title" style={{ display: "block", marginBottom: "0.5rem", fontWeight: "500", color: "#374151" }}>
                     Goal Title *
                   </label>
                   <input
+                    id="goal-title"
                     type="text"
                     value={newGoal.title}
                     onChange={(e) => setNewGoal({ ...newGoal, title: e.target.value })}
@@ -760,10 +814,11 @@ const LearningDashboard = () => {
                 </div>
                 
                 <div>
-                  <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "500", color: "#374151" }}>
+                  <label htmlFor="goal-description" style={{ display: "block", marginBottom: "0.5rem", fontWeight: "500", color: "#374151" }}>
                     Description
                   </label>
                   <textarea
+                    id="goal-description"
                     value={newGoal.description}
                     onChange={(e) => setNewGoal({ ...newGoal, description: e.target.value })}
                     style={{ ...styles.input, width: "100%", height: "80px", resize: "vertical" }}
@@ -773,10 +828,11 @@ const LearningDashboard = () => {
                 
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
                   <div>
-                    <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "500", color: "#374151" }}>
+                    <label htmlFor="goal-category" style={{ display: "block", marginBottom: "0.5rem", fontWeight: "500", color: "#374151" }}>
                       Category
                     </label>
                     <select
+                      id="goal-category"
                       value={newGoal.category}
                       onChange={(e) => setNewGoal({ ...newGoal, category: e.target.value })}
                       style={{ ...styles.input, width: "100%" }}
@@ -788,10 +844,11 @@ const LearningDashboard = () => {
                   </div>
                   
                   <div>
-                    <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "500", color: "#374151" }}>
+                    <label htmlFor="goal-due-date" style={{ display: "block", marginBottom: "0.5rem", fontWeight: "500", color: "#374151" }}>
                       Due Date
                     </label>
                     <input
+                      id="goal-due-date"
                       type="date"
                       value={newGoal.dueDate}
                       onChange={(e) => setNewGoal({ ...newGoal, dueDate: e.target.value })}
@@ -803,10 +860,11 @@ const LearningDashboard = () => {
             ) : (
               <>
                 <div>
-                  <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "500", color: "#374151" }}>
+                  <label htmlFor="task-description" style={{ display: "block", marginBottom: "0.5rem", fontWeight: "500", color: "#374151" }}>
                     Task Description *
                   </label>
                   <input
+                    id="task-description"
                     type="text"
                     value={newTask.text}
                     onChange={(e) => setNewTask({ ...newTask, text: e.target.value })}
@@ -818,13 +876,14 @@ const LearningDashboard = () => {
                 
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
                   <div>
-                    <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "500", color: "#374151" }}>
+                    <label htmlFor="task-goal" style={{ display: "block", marginBottom: "0.5rem", fontWeight: "500", color: "#374151" }}>
                       Related Goal *
                     </label>
                     <select
+                      id="task-goal"
                       value={newTask.goalId}
                       onChange={(e) => setNewTask({ ...newTask, goalId: e.target.value })}
-                                            style={{ ...styles.input, width: "100%" }}
+                      style={{ ...styles.input, width: "100%" }}
                       required
                     >
                       <option value="">Select a goal</option>
@@ -837,10 +896,11 @@ const LearningDashboard = () => {
                   </div>
                   
                   <div>
-                    <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "500", color: "#374151" }}>
+                    <label htmlFor="task-priority" style={{ display: "block", marginBottom: "0.5rem", fontWeight: "500", color: "#374151" }}>
                       Priority
                     </label>
                     <select
+                      id="task-priority"
                       value={newTask.priority}
                       onChange={(e) => setNewTask({ ...newTask, priority: e.target.value })}
                       style={{ ...styles.input, width: "100%" }}
@@ -879,9 +939,26 @@ const LearningDashboard = () => {
 
   return (
     <div style={styles.body}>
+      {/* Add structured data for better SEO */}
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          "name": "Learning Goal Tracker",
+          "description": "A comprehensive learning dashboard to track your goals, tasks, and progress in one place.",
+          "applicationCategory": "EducationalApplication",
+          "operatingSystem": "Any",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          }
+        })}
+      </script>
+      
       <div style={styles.container}>
         {/* Navigation */}
-        <nav style={styles.navigation}>
+        <nav style={styles.navigation} aria-label="Main navigation">
           <div style={{ display: "flex", justifyContent: "center", gap: "0.5rem" }}>
             <button
               onClick={() => setCurrentPage("dashboard")}
@@ -892,8 +969,9 @@ const LearningDashboard = () => {
                 alignItems: "center",
                 gap: "0.5rem"
               }}
+              aria-current={currentPage === "dashboard" ? "page" : undefined}
             >
-              <Home size={16} /> Dashboard
+              <Home size={16} aria-hidden="true" /> Dashboard
             </button>
             <button
               onClick={() => setCurrentPage("goals")}
@@ -904,8 +982,9 @@ const LearningDashboard = () => {
                 alignItems: "center",
                 gap: "0.5rem"
               }}
+              aria-current={currentPage === "goals" ? "page" : undefined}
             >
-              <Target size={16} /> Goals
+              <Target size={16} aria-hidden="true" /> Goals
             </button>
             <button
               onClick={() => setCurrentPage("tasks")}
@@ -916,8 +995,9 @@ const LearningDashboard = () => {
                 alignItems: "center",
                 gap: "0.5rem"
               }}
+              aria-current={currentPage === "tasks" ? "page" : undefined}
             >
-              <CheckCircle size={16} /> Tasks
+              <CheckCircle size={16} aria-hidden="true" /> Tasks
             </button>
             <button
               onClick={() => setCurrentPage("profile")}
@@ -928,8 +1008,9 @@ const LearningDashboard = () => {
                 alignItems: "center",
                 gap: "0.5rem"
               }}
+              aria-current={currentPage === "profile" ? "page" : undefined}
             >
-              <User size={16} /> Profile
+              <User size={16} aria-hidden="true" /> Profile
             </button>
           </div>
         </nav>
