@@ -1,53 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    
-    <!-- Add this CSS to ensure proper styling -->
-    <style>
-      * {
-        box-sizing: border-box;
-      }
-      
-      body {
-        margin: 0;
-        padding: 0;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-        background-color: #f9fafb !important;
-        min-height: 100vh;
-      }
-      
-      #root {
-        min-height: 100vh;
-      }
-    </style>
 
-    <title>LearnHub: Learning Goal Tracker & Study Planner</title>
-    
-    <!-- rest of your meta tags... -->
-    <meta name="description" content="Track your learning goals, manage study tasks, and visualize your progress with LearnHub. The ultimate dashboard for students and self-learners." />
-    <meta name="keywords" content="learning goal tracker, study planner app, task manager for students, skill progress dashboard, education, self-learning" />
-    <meta name="robots" content="index, follow" />
-    
-    <meta property="og:title" content="LearnHub: Learning Goal Tracker & Study Planner" />
-    <meta property="og:description" content="Stay on top of your study goals and track progress effectively with LearnHub." />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="%PUBLIC_URL%/logo192.png" />
-    <meta property="og:url" content="https://yourdomain.com" />
-    
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="LearnHub: Learning Goal Tracker" />
-    <meta name="twitter:description" content="Your personal dashboard to manage learning goals, tasks, and study progress." />
-    <meta name="twitter:image" content="%PUBLIC_URL%/logo192.png" />
-    
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-  </body>
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+
+  <!-- Add this CSS to ensure proper styling -->
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      background-color: #f9fafb !important;
+      min-height: 100vh;
+    }
+
+    #root {
+      min-height: 100vh;
+    }
+  </style>
+
+  <title>LearnHub: Learning Goal Tracker & Study Planner</title>
+
+  <!-- rest of your meta tags... -->
+  <meta name="description"
+    content="Track your learning goals, manage study tasks, and visualize your progress with LearnHub. The ultimate dashboard for students and self-learners." />
+  <meta name="keywords"
+    content="learning goal tracker, study planner app, task manager for students, skill progress dashboard, education, self-learning" />
+  <meta name="robots" content="index, follow" />
+
+  <meta property="og:title" content="LearnHub: Learning Goal Tracker & Study Planner" />
+  <meta property="og:description"
+    content="Stay on top of your study goals and track progress effectively with LearnHub." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="%PUBLIC_URL%/logo192.png" />
+  <meta property="og:url" content="https://yourdomain.com" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="LearnHub: Learning Goal Tracker" />
+  <meta name="twitter:description"
+    content="Your personal dashboard to manage learning goals, tasks, and study progress." />
+  <meta name="twitter:image" content="%PUBLIC_URL%/logo192.png" />
+
+  <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+</head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F2HGTH6ENL"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'G-F2HGTH6ENL');
+</script>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+</body>
+
 </html>
